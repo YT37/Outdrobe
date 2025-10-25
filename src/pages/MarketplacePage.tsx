@@ -1,11 +1,26 @@
+import {
+  ExternalLink,
+  Search,
+  ShoppingCart,
+  Sparkles,
+  Store,
+  Tag,
+  TruckIcon,
+  User,
+  Zap,
+} from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
-import { ShoppingCart, Sparkles, Tag, TruckIcon, Store, ExternalLink, Search, Zap, User } from "lucide-react";
-import { Button } from "../components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../components/ui/card";
-import { Badge } from "../components/ui/badge";
-import { Input } from "../components/ui/input";
 import { AvatarViewer } from "../components/AvatarViewer";
+import { Badge } from "../components/ui/badge";
+import { Button } from "../components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../components/ui/card";
 import { Checkbox } from "../components/ui/checkbox";
 
 interface WardrobeItem {
@@ -38,12 +53,52 @@ export function MarketplacePage() {
 
   // Mock wardrobe items
   const wardrobeItems: WardrobeItem[] = [
-    { id: 1, name: "Black Leather Jacket", category: "Outerwear", color: "Black", image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400" },
-    { id: 2, name: "White Cotton T-Shirt", category: "Tops", color: "White", image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400" },
-    { id: 3, name: "Blue Denim Jeans", category: "Bottoms", color: "Blue", image: "https://images.unsplash.com/photo-1542272604-787c3835535d?w=400" },
-    { id: 4, name: "Beige Trench Coat", category: "Outerwear", color: "Beige", image: "https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=400" },
-    { id: 5, name: "Striped Button-Up Shirt", category: "Tops", color: "Multi", image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400" },
-    { id: 6, name: "Gray Wool Sweater", category: "Tops", color: "Gray", image: "https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=400" },
+    {
+      id: 1,
+      name: "Black Leather Jacket",
+      category: "Outerwear",
+      color: "Black",
+      image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400",
+    },
+    {
+      id: 2,
+      name: "White Cotton T-Shirt",
+      category: "Tops",
+      color: "White",
+      image:
+        "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400",
+    },
+    {
+      id: 3,
+      name: "Blue Denim Jeans",
+      category: "Bottoms",
+      color: "Blue",
+      image: "https://images.unsplash.com/photo-1542272604-787c3835535d?w=400",
+    },
+    {
+      id: 4,
+      name: "Beige Trench Coat",
+      category: "Outerwear",
+      color: "Beige",
+      image:
+        "https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=400",
+    },
+    {
+      id: 5,
+      name: "Striped Button-Up Shirt",
+      category: "Tops",
+      color: "Multi",
+      image:
+        "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400",
+    },
+    {
+      id: 6,
+      name: "Gray Wool Sweater",
+      category: "Tops",
+      color: "Gray",
+      image:
+        "https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=400",
+    },
   ];
 
   // Mock AI-generated recommendations
@@ -55,23 +110,27 @@ export function MarketplacePage() {
           name: "Slim Fit Black Jeans",
           price: 39.99,
           originalPrice: 59.99,
-          image: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=400",
+          image:
+            "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=400",
           store: "ASOS",
           link: "#",
           promoCode: "STYLE20",
           shipping: "Free Shipping",
-          pairingReason: "Classic black-on-black look. Perfect for edgy street style.",
+          pairingReason:
+            "Classic black-on-black look. Perfect for edgy street style.",
           rating: 4.5,
         },
         {
           id: 2,
           name: "White Graphic Tee",
           price: 19.99,
-          image: "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=400",
+          image:
+            "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=400",
           store: "H&M",
           link: "#",
           shipping: "Pickup Available",
-          pairingReason: "Contrasts beautifully with black leather. Timeless combo.",
+          pairingReason:
+            "Contrasts beautifully with black leather. Timeless combo.",
           rating: 4.2,
         },
         {
@@ -79,12 +138,14 @@ export function MarketplacePage() {
           name: "Chelsea Boots",
           price: 89.99,
           originalPrice: 129.99,
-          image: "https://images.unsplash.com/photo-1608256246200-53e635b5b65f?w=400",
+          image:
+            "https://images.unsplash.com/photo-1608256246200-53e635b5b65f?w=400",
           store: "Nordstrom",
           link: "#",
           promoCode: "BOOTS15",
           shipping: "Free Shipping",
-          pairingReason: "Completes the rocker aesthetic. Essential for leather jackets.",
+          pairingReason:
+            "Completes the rocker aesthetic. Essential for leather jackets.",
           rating: 4.8,
         },
       ],
@@ -93,12 +154,14 @@ export function MarketplacePage() {
           id: 4,
           name: "High-Waisted Mom Jeans",
           price: 44.99,
-          image: "https://images.unsplash.com/photo-1582418702059-97ebafb35d09?w=400",
+          image:
+            "https://images.unsplash.com/photo-1582418702059-97ebafb35d09?w=400",
           store: "Urban Outfitters",
           link: "#",
           promoCode: "UO10OFF",
           shipping: "Free Shipping",
-          pairingReason: "Creates a clean, minimalist look. Perfect casual outfit.",
+          pairingReason:
+            "Creates a clean, minimalist look. Perfect casual outfit.",
           rating: 4.6,
         },
         {
@@ -106,7 +169,8 @@ export function MarketplacePage() {
           name: "Denim Overshirt",
           price: 54.99,
           originalPrice: 74.99,
-          image: "https://images.unsplash.com/photo-1551537482-f2075a1d41f2?w=400",
+          image:
+            "https://images.unsplash.com/photo-1551537482-f2075a1d41f2?w=400",
           store: "Zara",
           link: "#",
           shipping: "Pickup Available",
@@ -119,7 +183,8 @@ export function MarketplacePage() {
           id: 6,
           name: "Striped Long-Sleeve Tee",
           price: 29.99,
-          image: "https://images.unsplash.com/photo-1562157873-818bc0726f68?w=400",
+          image:
+            "https://images.unsplash.com/photo-1562157873-818bc0726f68?w=400",
           store: "Uniqlo",
           link: "#",
           shipping: "Free Shipping",
@@ -131,7 +196,8 @@ export function MarketplacePage() {
           name: "Camel Suede Jacket",
           price: 119.99,
           originalPrice: 179.99,
-          image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=400",
+          image:
+            "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=400",
           store: "Mango",
           link: "#",
           promoCode: "FALL25",
@@ -142,19 +208,22 @@ export function MarketplacePage() {
       ],
     };
 
-    return recommendations[item.name] || [
-      {
-        id: 8,
-        name: "Basic White Sneakers",
-        price: 49.99,
-        image: "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400",
-        store: "Nike",
-        link: "#",
-        shipping: "Free Shipping",
-        pairingReason: "Versatile staple that pairs well with any outfit.",
-        rating: 4.5,
-      },
-    ];
+    return (
+      recommendations[item.name] || [
+        {
+          id: 8,
+          name: "Basic White Sneakers",
+          price: 49.99,
+          image:
+            "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400",
+          store: "Nike",
+          link: "#",
+          shipping: "Free Shipping",
+          pairingReason: "Versatile staple that pairs well with any outfit.",
+          rating: 4.5,
+        },
+      ]
+    );
   };
 
   const handleAnalyze = (item: WardrobeItem) => {
@@ -162,7 +231,7 @@ export function MarketplacePage() {
     setAnalyzing(true);
     // Add the base wardrobe item to try-on
     if (!tryOnItems.includes(item.name)) {
-      setTryOnItems(prev => [...prev, item.name]);
+      setTryOnItems((prev) => [...prev, item.name]);
     }
     setTimeout(() => {
       setAnalyzing(false);
@@ -170,9 +239,9 @@ export function MarketplacePage() {
   };
 
   const toggleTryOn = (itemName: string) => {
-    setTryOnItems(prev => 
-      prev.includes(itemName) 
-        ? prev.filter(name => name !== itemName)
+    setTryOnItems((prev) =>
+      prev.includes(itemName)
+        ? prev.filter((name) => name !== itemName)
         : [...prev, itemName]
     );
   };
@@ -191,12 +260,19 @@ export function MarketplacePage() {
           <div className="inline-block p-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full mb-4">
             <ShoppingCart className="size-8 text-white" />
           </div>
-          <h1 className="text-5xl md:text-6xl mb-4" style={{ fontFamily: 'var(--font-heading)' }}>
+          <h1
+            className="text-5xl md:text-6xl mb-4"
+            style={{ fontFamily: "var(--font-heading)" }}
+          >
             <span className="text-black dark:text-white">Smart</span>
-            <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent"> Marketplace</span>
+            <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+              {" "}
+              Marketplace
+            </span>
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            AI-powered shopping assistant that analyzes your wardrobe and finds the perfect pairing items at the best prices
+            AI-powered shopping assistant that analyzes your wardrobe and finds
+            the perfect pairing items at the best prices
           </p>
         </motion.div>
 
@@ -214,7 +290,8 @@ export function MarketplacePage() {
                 Select an Item from Your Wardrobe
               </CardTitle>
               <CardDescription>
-                Choose any item to get AI-powered pairing suggestions with the best deals
+                Choose any item to get AI-powered pairing suggestions with the
+                best deals
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -280,7 +357,10 @@ export function MarketplacePage() {
             className="space-y-6"
           >
             <div className="flex items-center justify-between">
-              <h2 className="text-3xl" style={{ fontFamily: 'var(--font-heading)' }}>
+              <h2
+                className="text-3xl"
+                style={{ fontFamily: "var(--font-heading)" }}
+              >
                 Perfect Pairings for{" "}
                 <span className="text-purple-600">{selectedItem.name}</span>
               </h2>
@@ -328,7 +408,10 @@ export function MarketplacePage() {
                           className="mt-1"
                         />
                         <div className="flex-1">
-                          <label htmlFor={`try-on-${product.id}`} className="cursor-pointer">
+                          <label
+                            htmlFor={`try-on-${product.id}`}
+                            className="cursor-pointer"
+                          >
                             <h3 className="text-lg mb-1">{product.name}</h3>
                             <p className="text-sm text-muted-foreground line-clamp-2">
                               {product.pairingReason}
@@ -426,7 +509,8 @@ export function MarketplacePage() {
               Select an item to get started
             </h3>
             <p className="text-muted-foreground">
-              Our AI will analyze your selection and find the best pairing options with exclusive deals
+              Our AI will analyze your selection and find the best pairing
+              options with exclusive deals
             </p>
           </motion.div>
         )}

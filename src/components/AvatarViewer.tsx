@@ -1,10 +1,15 @@
-import { Suspense, useState } from "react";
-import { Canvas } from "@react-three/fiber";
 import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
-import { motion } from "motion/react";
-import { Button } from "./ui/button";
-import { Palette, User, X } from "lucide-react";
-import { Badge } from "./ui/badge";
+import { Canvas } from "@react-three/fiber";
+import {
+  Badge,
+  Button,
+  motion,
+  Palette,
+  Suspense,
+  User,
+  useState,
+  X,
+} from "../utils/shared-imports";
 
 interface AvatarViewerProps {
   isOpen: boolean;
@@ -21,7 +26,13 @@ const SKIN_TONES = [
 ];
 
 // Simple 3D Avatar component
-function Avatar({ skinTone, clothingColor }: { skinTone: string; clothingColor: string }) {
+function Avatar({
+  skinTone,
+  clothingColor,
+}: {
+  skinTone: string;
+  clothingColor: string;
+}) {
   return (
     <group>
       {/* Head */}
@@ -98,11 +109,17 @@ function Avatar({ skinTone, clothingColor }: { skinTone: string; clothingColor: 
 }
 
 // 3D Scene component
-function AvatarScene({ skinTone, autoRotate }: { skinTone: string; autoRotate: boolean }) {
+function AvatarScene({
+  skinTone,
+  autoRotate,
+}: {
+  skinTone: string;
+  autoRotate: boolean;
+}) {
   return (
     <>
       <PerspectiveCamera makeDefault position={[0, 1, 3]} />
-      
+
       {/* Lighting */}
       <ambientLight intensity={0.6} />
       <directionalLight position={[5, 5, 5]} intensity={0.8} castShadow />
@@ -113,7 +130,11 @@ function AvatarScene({ skinTone, autoRotate }: { skinTone: string; autoRotate: b
       <Avatar skinTone={skinTone} clothingColor="#4A90E2" />
 
       {/* Ground plane */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.3, 0]} receiveShadow>
+      <mesh
+        rotation={[-Math.PI / 2, 0, 0]}
+        position={[0, -1.3, 0]}
+        receiveShadow
+      >
         <circleGeometry args={[2, 32]} />
         <meshStandardMaterial color="#e0e0e0" opacity={0.5} transparent />
       </mesh>
@@ -132,7 +153,11 @@ function AvatarScene({ skinTone, autoRotate }: { skinTone: string; autoRotate: b
   );
 }
 
-export function AvatarViewer({ isOpen, onClose, selectedItems }: AvatarViewerProps) {
+export function AvatarViewer({
+  isOpen,
+  onClose,
+  selectedItems,
+}: AvatarViewerProps) {
   const [skinTone, setSkinTone] = useState(SKIN_TONES[0].color);
   const [autoRotate, setAutoRotate] = useState(true);
 
@@ -160,7 +185,10 @@ export function AvatarViewer({ isOpen, onClose, selectedItems }: AvatarViewerPro
               <User className="size-6 text-white" />
             </div>
             <div>
-              <h2 className="text-2xl" style={{ fontFamily: 'var(--font-heading)' }}>
+              <h2
+                className="text-2xl"
+                style={{ fontFamily: "var(--font-heading)" }}
+              >
                 Try On Avatar
               </h2>
               <p className="text-sm text-muted-foreground">
@@ -189,7 +217,11 @@ export function AvatarViewer({ isOpen, onClose, selectedItems }: AvatarViewerPro
                 size="sm"
                 variant={autoRotate ? "default" : "secondary"}
                 onClick={() => setAutoRotate(!autoRotate)}
-                className={autoRotate ? "bg-gradient-to-r from-purple-600 to-pink-600" : ""}
+                className={
+                  autoRotate
+                    ? "bg-gradient-to-r from-purple-600 to-pink-600"
+                    : ""
+                }
               >
                 {autoRotate ? "⏸ Stop Spin" : "▶ Auto Spin"}
               </Button>
@@ -257,7 +289,8 @@ export function AvatarViewer({ isOpen, onClose, selectedItems }: AvatarViewerPro
             {/* Info */}
             <div className="p-4 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-950/20 dark:to-pink-950/20 rounded-lg border border-purple-200 dark:border-purple-800">
               <p className="text-sm text-muted-foreground">
-                💡 <strong>Pro Tip:</strong> This 3D preview helps you visualize how different items look together before making a purchase!
+                💡 <strong>Pro Tip:</strong> This 3D preview helps you visualize
+                how different items look together before making a purchase!
               </p>
             </div>
           </div>

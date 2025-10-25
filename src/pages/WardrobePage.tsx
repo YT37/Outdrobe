@@ -1,10 +1,24 @@
+import {
+  Calendar,
+  Filter,
+  Grid3x3,
+  Heart,
+  List,
+  Palette,
+  Plus,
+  Search,
+  Shirt,
+  ShoppingBag,
+  Sparkles,
+  TrendingUp,
+  Upload,
+} from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { ImageWithFallback } from "../components/common/ImageWithFallback";
+import { Badge } from "../components/ui/badge";
 import { Button } from "../components/ui/button";
 import { Card, CardContent } from "../components/ui/card";
-import { Badge } from "../components/ui/badge";
-import { Input } from "../components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
 import {
   Dialog,
   DialogContent,
@@ -13,6 +27,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../components/ui/dialog";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
 import {
   Select,
   SelectContent,
@@ -20,23 +36,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../components/ui/select";
-import { Label } from "../components/ui/label";
-import { 
-  Plus, 
-  Upload,
-  Shirt,
-  ShoppingBag,
-  Sparkles,
-  Search,
-  Filter,
-  Grid3x3,
-  List,
-  Palette,
-  Calendar,
-  TrendingUp,
-  Heart
-} from "lucide-react";
-import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 
 interface ClothingItem {
   id: string;
@@ -52,108 +51,138 @@ interface ClothingItem {
 }
 
 export function WardrobePage() {
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
 
   // Mock wardrobe data
   const [wardrobeItems] = useState<ClothingItem[]>([
     {
-      id: '1',
-      name: 'Black Slim Jeans',
-      category: 'bottoms',
-      color: '#1a1a1a',
-      imageUrl: 'https://images.unsplash.com/photo-1639602182178-2dc689354103?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjYXN1YWwlMjBqZWFucyUyMGRlbmltfGVufDF8fHx8MTc2MTM2MjUwM3ww&ixlib=rb-4.1.0&q=80&w=400',
-      brand: 'Levi\'s',
+      id: "1",
+      name: "Black Slim Jeans",
+      category: "bottoms",
+      color: "#1a1a1a",
+      imageUrl:
+        "https://images.unsplash.com/photo-1639602182178-2dc689354103?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjYXN1YWwlMjBqZWFucyUyMGRlbmltfGVufDF8fHx8MTc2MTM2MjUwM3ww&ixlib=rb-4.1.0&q=80&w=400",
+      brand: "Levi's",
       timesWorn: 15,
-      lastWorn: new Date('2024-10-20'),
-      tags: ['casual', 'everyday'],
-      favorite: true
+      lastWorn: new Date("2024-10-20"),
+      tags: ["casual", "everyday"],
+      favorite: true,
     },
     {
-      id: '2',
-      name: 'White Button-Up Shirt',
-      category: 'tops',
-      color: '#ffffff',
-      imageUrl: 'https://images.unsplash.com/photo-1760545183001-af3b64500b0d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkcmVzcyUyMHNoaXJ0JTIwZm9ybWFsfGVufDF8fHx8MTc2MTMxNTQ0Mnww&ixlib=rb-4.1.0&q=80&w=400',
-      brand: 'Brooks Brothers',
+      id: "2",
+      name: "White Button-Up Shirt",
+      category: "tops",
+      color: "#ffffff",
+      imageUrl:
+        "https://images.unsplash.com/photo-1760545183001-af3b64500b0d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkcmVzcyUyMHNoaXJ0JTIwZm9ybWFsfGVufDF8fHx8MTc2MTMxNTQ0Mnww&ixlib=rb-4.1.0&q=80&w=400",
+      brand: "Brooks Brothers",
       timesWorn: 8,
-      lastWorn: new Date('2024-10-18'),
-      tags: ['formal', 'work'],
-      favorite: false
+      lastWorn: new Date("2024-10-18"),
+      tags: ["formal", "work"],
+      favorite: false,
     },
     {
-      id: '3',
-      name: 'Beige Blazer',
-      category: 'outerwear',
-      color: '#d4c4a8',
-      imageUrl: 'https://images.unsplash.com/photo-1760939065084-ffe89e085de8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjbG90aGluZyUyMGl0ZW1zJTIwaGFuZ2luZ3xlbnwxfHx8fDE3NjEzNjI1MDJ8MA&ixlib=rb-4.1.0&q=80&w=400',
-      brand: 'Zara',
+      id: "3",
+      name: "Beige Blazer",
+      category: "outerwear",
+      color: "#d4c4a8",
+      imageUrl:
+        "https://images.unsplash.com/photo-1760939065084-ffe89e085de8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjbG90aGluZyUyMGl0ZW1zJTIwaGFuZ2luZ3xlbnwxfHx8fDE3NjEzNjI1MDJ8MA&ixlib=rb-4.1.0&q=80&w=400",
+      brand: "Zara",
       timesWorn: 5,
-      lastWorn: new Date('2024-10-15'),
-      tags: ['formal', 'smart-casual'],
-      favorite: true
+      lastWorn: new Date("2024-10-15"),
+      tags: ["formal", "smart-casual"],
+      favorite: true,
     },
     {
-      id: '4',
-      name: 'Grey Hoodie',
-      category: 'tops',
-      color: '#808080',
-      imageUrl: 'https://images.unsplash.com/photo-1736697421338-c361795c7191?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmYXNoaW9uJTIwd2FyZHJvYmUlMjBjbG9zZXR8ZW58MXx8fHwxNzYxMzYyNTAxfDA&ixlib=rb-4.1.0&q=80&w=400',
-      brand: 'Nike',
+      id: "4",
+      name: "Grey Hoodie",
+      category: "tops",
+      color: "#808080",
+      imageUrl:
+        "https://images.unsplash.com/photo-1736697421338-c361795c7191?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmYXNoaW9uJTIwd2FyZHJvYmUlMjBjbG9zZXR8ZW58MXx8fHwxNzYxMzYyNTAxfDA&ixlib=rb-4.1.0&q=80&w=400",
+      brand: "Nike",
       timesWorn: 22,
-      lastWorn: new Date('2024-10-22'),
-      tags: ['casual', 'athleisure'],
-      favorite: true
+      lastWorn: new Date("2024-10-22"),
+      tags: ["casual", "athleisure"],
+      favorite: true,
     },
     {
-      id: '5',
-      name: 'Navy Blue Chinos',
-      category: 'bottoms',
-      color: '#1e3a5f',
-      imageUrl: 'https://images.unsplash.com/photo-1569388330292-79cc1ec67270?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmYXNoaW9uJTIwYWNjZXNzb3JpZXN8ZW58MXx8fHwxNzYxMjk1MzIwfDA&ixlib=rb-4.1.0&q=80&w=400',
-      brand: 'H&M',
+      id: "5",
+      name: "Navy Blue Chinos",
+      category: "bottoms",
+      color: "#1e3a5f",
+      imageUrl:
+        "https://images.unsplash.com/photo-1569388330292-79cc1ec67270?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmYXNoaW9uJTIwYWNjZXNzb3JpZXN8ZW58MXx8fHwxNzYxMjk1MzIwfDA&ixlib=rb-4.1.0&q=80&w=400",
+      brand: "H&M",
       timesWorn: 12,
-      lastWorn: new Date('2024-10-19'),
-      tags: ['smart-casual', 'work'],
-      favorite: false
+      lastWorn: new Date("2024-10-19"),
+      tags: ["smart-casual", "work"],
+      favorite: false,
     },
     {
-      id: '6',
-      name: 'Leather Jacket',
-      category: 'outerwear',
-      color: '#2e1f13',
-      imageUrl: 'https://images.unsplash.com/photo-1736697421338-c361795c7191?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmYXNoaW9uJTIwd2FyZHJvYmUlMjBjbG9zZXR8ZW58MXx8fHwxNzYxMzYyNTAxfDA&ixlib=rb-4.1.0&q=80&w=400',
-      brand: 'AllSaints',
+      id: "6",
+      name: "Leather Jacket",
+      category: "outerwear",
+      color: "#2e1f13",
+      imageUrl:
+        "https://images.unsplash.com/photo-1736697421338-c361795c7191?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmYXNoaW9uJTIwd2FyZHJvYmUlMjBjbG9zZXR8ZW58MXx8fHwxNzYxMzYyNTAxfDA&ixlib=rb-4.1.0&q=80&w=400",
+      brand: "AllSaints",
       timesWorn: 7,
-      lastWorn: new Date('2024-10-16'),
-      tags: ['casual', 'streetwear'],
-      favorite: true
+      lastWorn: new Date("2024-10-16"),
+      tags: ["casual", "streetwear"],
+      favorite: true,
     },
   ]);
 
   const categories = [
-    { value: 'all', label: 'All Items', icon: Grid3x3 },
-    { value: 'tops', label: 'Tops', icon: Shirt },
-    { value: 'bottoms', label: 'Bottoms', icon: ShoppingBag },
-    { value: 'outerwear', label: 'Outerwear', icon: Shirt },
-    { value: 'accessories', label: 'Accessories', icon: Sparkles },
+    { value: "all", label: "All Items", icon: Grid3x3 },
+    { value: "tops", label: "Tops", icon: Shirt },
+    { value: "bottoms", label: "Bottoms", icon: ShoppingBag },
+    { value: "outerwear", label: "Outerwear", icon: Shirt },
+    { value: "accessories", label: "Accessories", icon: Sparkles },
   ];
 
-  const filteredItems = wardrobeItems.filter(item => {
-    const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         item.brand?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         item.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
-    const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory;
+  const filteredItems = wardrobeItems.filter((item) => {
+    const matchesSearch =
+      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.brand?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.tags.some((tag) =>
+        tag.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    const matchesCategory =
+      selectedCategory === "all" || item.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
   const stats = [
-    { label: 'Total Items', value: wardrobeItems.length, icon: ShoppingBag, color: '#8B5CF6' },
-    { label: 'Favorites', value: wardrobeItems.filter(i => i.favorite).length, icon: Heart, color: '#EC4899' },
-    { label: 'Most Worn', value: Math.max(...wardrobeItems.map(i => i.timesWorn)), icon: TrendingUp, color: '#10B981' },
-    { label: 'Categories', value: new Set(wardrobeItems.map(i => i.category)).size, icon: Palette, color: '#F59E0B' },
+    {
+      label: "Total Items",
+      value: wardrobeItems.length,
+      icon: ShoppingBag,
+      color: "#8B5CF6",
+    },
+    {
+      label: "Favorites",
+      value: wardrobeItems.filter((i) => i.favorite).length,
+      icon: Heart,
+      color: "#EC4899",
+    },
+    {
+      label: "Most Worn",
+      value: Math.max(...wardrobeItems.map((i) => i.timesWorn)),
+      icon: TrendingUp,
+      color: "#10B981",
+    },
+    {
+      label: "Categories",
+      value: new Set(wardrobeItems.map((i) => i.category)).size,
+      icon: Palette,
+      color: "#F59E0B",
+    },
   ];
 
   return (
@@ -242,15 +271,20 @@ export function WardrobePage() {
                 <Card className="border-2 hover:shadow-lg transition-shadow">
                   <CardContent className="p-4">
                     <div className="flex items-center gap-3">
-                      <div 
+                      <div
                         className="size-10 rounded-lg flex items-center justify-center"
                         style={{ backgroundColor: `${stat.color}20` }}
                       >
-                        <stat.icon className="size-5" style={{ color: stat.color }} />
+                        <stat.icon
+                          className="size-5"
+                          style={{ color: stat.color }}
+                        />
                       </div>
                       <div>
                         <p className="text-2xl">{stat.value}</p>
-                        <p className="text-xs text-muted-foreground">{stat.label}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {stat.label}
+                        </p>
                       </div>
                     </div>
                   </CardContent>
@@ -281,7 +315,10 @@ export function WardrobePage() {
                 </div>
 
                 <div className="flex gap-2">
-                  <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                  <Select
+                    value={selectedCategory}
+                    onValueChange={setSelectedCategory}
+                  >
                     <SelectTrigger className="w-[180px]">
                       <Filter className="size-4 mr-2" />
                       <SelectValue />
@@ -297,17 +334,17 @@ export function WardrobePage() {
 
                   <div className="flex border rounded-lg overflow-hidden">
                     <Button
-                      variant={viewMode === 'grid' ? 'default' : 'ghost'}
+                      variant={viewMode === "grid" ? "default" : "ghost"}
                       size="icon"
-                      onClick={() => setViewMode('grid')}
+                      onClick={() => setViewMode("grid")}
                       className="rounded-none"
                     >
                       <Grid3x3 className="size-4" />
                     </Button>
                     <Button
-                      variant={viewMode === 'list' ? 'default' : 'ghost'}
+                      variant={viewMode === "list" ? "default" : "ghost"}
                       size="icon"
-                      onClick={() => setViewMode('list')}
+                      onClick={() => setViewMode("list")}
                       className="rounded-none"
                     >
                       <List className="size-4" />
@@ -326,7 +363,7 @@ export function WardrobePage() {
           transition={{ delay: 0.3 }}
         >
           <AnimatePresence mode="wait">
-            {viewMode === 'grid' ? (
+            {viewMode === "grid" ? (
               <motion.div
                 key="grid"
                 initial={{ opacity: 0 }}
@@ -354,7 +391,7 @@ export function WardrobePage() {
                             <Heart className="size-4 fill-pink-500 text-pink-500" />
                           </div>
                         )}
-                        <div 
+                        <div
                           className="absolute bottom-0 left-0 right-0 h-1"
                           style={{ backgroundColor: item.color }}
                         />
@@ -362,11 +399,17 @@ export function WardrobePage() {
                       <CardContent className="p-4">
                         <h3 className="mb-1">{item.name}</h3>
                         {item.brand && (
-                          <p className="text-sm text-muted-foreground mb-2">{item.brand}</p>
+                          <p className="text-sm text-muted-foreground mb-2">
+                            {item.brand}
+                          </p>
                         )}
                         <div className="flex items-center gap-2 mb-3">
                           {item.tags.slice(0, 2).map((tag, idx) => (
-                            <Badge key={idx} variant="secondary" className="text-xs">
+                            <Badge
+                              key={idx}
+                              variant="secondary"
+                              className="text-xs"
+                            >
                               {tag}
                             </Badge>
                           ))}
@@ -379,7 +422,11 @@ export function WardrobePage() {
                           {item.lastWorn && (
                             <span className="flex items-center gap-1">
                               <Calendar className="size-3" />
-                              {Math.floor((Date.now() - item.lastWorn.getTime()) / (1000 * 60 * 60 * 24))}d ago
+                              {Math.floor(
+                                (Date.now() - item.lastWorn.getTime()) /
+                                  (1000 * 60 * 60 * 24)
+                              )}
+                              d ago
                             </span>
                           )}
                         </div>
@@ -418,7 +465,9 @@ export function WardrobePage() {
                               <div>
                                 <h3 className="mb-1">{item.name}</h3>
                                 {item.brand && (
-                                  <p className="text-sm text-muted-foreground">{item.brand}</p>
+                                  <p className="text-sm text-muted-foreground">
+                                    {item.brand}
+                                  </p>
                                 )}
                               </div>
                               {item.favorite && (
@@ -427,14 +476,18 @@ export function WardrobePage() {
                             </div>
                             <div className="flex items-center gap-2 mb-2">
                               {item.tags.map((tag, idx) => (
-                                <Badge key={idx} variant="secondary" className="text-xs">
+                                <Badge
+                                  key={idx}
+                                  variant="secondary"
+                                  className="text-xs"
+                                >
                                   {tag}
                                 </Badge>
                               ))}
                             </div>
                             <div className="flex items-center gap-4 text-xs text-muted-foreground">
                               <span className="flex items-center gap-1">
-                                <div 
+                                <div
                                   className="size-3 rounded-full border"
                                   style={{ backgroundColor: item.color }}
                                 />
@@ -447,7 +500,12 @@ export function WardrobePage() {
                               {item.lastWorn && (
                                 <span className="flex items-center gap-1">
                                   <Calendar className="size-3" />
-                                  Last worn {Math.floor((Date.now() - item.lastWorn.getTime()) / (1000 * 60 * 60 * 24))} days ago
+                                  Last worn{" "}
+                                  {Math.floor(
+                                    (Date.now() - item.lastWorn.getTime()) /
+                                      (1000 * 60 * 60 * 24)
+                                  )}{" "}
+                                  days ago
                                 </span>
                               )}
                             </div>
@@ -472,7 +530,12 @@ export function WardrobePage() {
               <p className="text-muted-foreground mb-6">
                 Try adjusting your search or filters
               </p>
-              <Button onClick={() => { setSearchQuery(''); setSelectedCategory('all'); }}>
+              <Button
+                onClick={() => {
+                  setSearchQuery("");
+                  setSelectedCategory("all");
+                }}
+              >
                 Clear Filters
               </Button>
             </motion.div>

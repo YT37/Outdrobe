@@ -1,7 +1,4 @@
-import { Button } from "./ui/button";
-import { Mic, Users, Zap } from "lucide-react";
-import { motion } from "motion/react";
-import { Link } from "react-router-dom";
+import { Button, Link, Mic, Users, Zap, motion } from "../utils/shared-imports";
 
 export function CTA() {
   const features = [
@@ -39,8 +36,8 @@ export function CTA() {
             Ready to Transform Your Wardrobe?
           </h2>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Join thousands who never worry about "what to wear" again. 
-            Kloset, your AI fashion advisor, is ready to help.
+            Join thousands who never worry about "what to wear" again. Kloset,
+            your AI fashion advisor, is ready to help.
           </p>
 
           <div className="flex flex-wrap justify-center gap-4 mb-12">
@@ -66,7 +63,10 @@ export function CTA() {
             transition={{ delay: 0.4, duration: 0.6 }}
           >
             <Link to="/ai-agent">
-              <Button size="lg" className="text-lg px-12 py-7 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
+              <Button
+                size="lg"
+                className="text-lg px-12 py-7 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+              >
                 Start Your Fashion Journey
               </Button>
             </Link>
@@ -90,9 +90,15 @@ export function CTA() {
             © 2025 Outdrobe. Your AI Fashion Companion.
           </div>
           <div className="flex gap-6 text-sm">
-            <a href="#" className="hover:text-primary transition-colors">Privacy</a>
-            <a href="#" className="hover:text-primary transition-colors">Terms</a>
-            <a href="#" className="hover:text-primary transition-colors">Contact</a>
+            <a href="#" className="hover:text-primary transition-colors">
+              Privacy
+            </a>
+            <a href="#" className="hover:text-primary transition-colors">
+              Terms
+            </a>
+            <a href="#" className="hover:text-primary transition-colors">
+              Contact
+            </a>
           </div>
         </div>
       </motion.div>

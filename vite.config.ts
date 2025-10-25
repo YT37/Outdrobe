@@ -1,13 +1,15 @@
 
-  import { defineConfig } from 'vite';
   import react from '@vitejs/plugin-react-swc';
-  import path from 'path';
+import path from 'path';
+import { defineConfig } from 'vite';
 
   export default defineConfig({
     plugins: [react()],
+    root: process.cwd(),
     resolve: {
       extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
       alias: {
+        // Normal module resolution for three.js
         'vaul@1.1.2': 'vaul',
         'sonner@2.0.3': 'sonner',
         'recharts@2.15.2': 'recharts',
@@ -51,7 +53,8 @@
     },
     build: {
       target: 'esnext',
-      outDir: 'build',
+      outDir: 'dist',
+      emptyOutDir: true,
     },
     server: {
       port: 3000,

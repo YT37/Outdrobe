@@ -1,7 +1,6 @@
-import { motion } from "motion/react";
-import { useInView } from "motion/react";
+import { Brain, Mic, ShoppingCart, Sparkles } from "lucide-react";
+import { motion, useInView } from "motion/react";
 import { useRef } from "react";
-import { Mic, Brain, Sparkles, ShoppingCart } from "lucide-react";
 
 export function HowItWorks() {
   const ref = useRef(null);
@@ -11,25 +10,29 @@ export function HowItWorks() {
     {
       icon: Mic,
       title: "Speak or Type",
-      description: "Tell Outdrobe about your plans: 'I have a date tonight' or 'What should I wear to class?'",
+      description:
+        "Tell Outdrobe about your plans: 'I have a date tonight' or 'What should I wear to class?'",
       color: "#8B5CF6",
     },
     {
       icon: Brain,
       title: "Kloset Analyzes",
-      description: "Kloset analyzes your wardrobe, checks outfit history, and considers event context.",
+      description:
+        "Kloset analyzes your wardrobe, checks outfit history, and considers event context.",
       color: "#EC4899",
     },
     {
       icon: Sparkles,
       title: "Get Suggestions",
-      description: "Receive unique, color-coordinated outfit combinations that you haven't worn recently.",
+      description:
+        "Receive unique, color-coordinated outfit combinations that you haven't worn recently.",
       color: "#06B6D4",
     },
     {
       icon: ShoppingCart,
       title: "Fill the Gaps",
-      description: "Missing items? Outdrobe finds affordable, high-rated alternatives with direct purchase links.",
+      description:
+        "Missing items? Outdrobe finds affordable, high-rated alternatives with direct purchase links.",
       color: "#10B981",
     },
   ];
@@ -62,7 +65,10 @@ export function HowItWorks() {
                   className="size-20 rounded-full flex items-center justify-center shrink-0"
                   style={{ backgroundColor: `${step.color}20` }}
                 >
-                  <step.icon className="size-10" style={{ color: step.color }} />
+                  <step.icon
+                    className="size-10"
+                    style={{ color: step.color }}
+                  />
                 </div>
                 <div
                   className="absolute -top-2 -right-2 size-8 rounded-full flex items-center justify-center text-sm"
@@ -71,7 +77,7 @@ export function HowItWorks() {
                   {index + 1}
                 </div>
               </div>
-              
+
               <div className="flex-1 text-center md:text-left">
                 <h3 className="text-2xl mb-2">{step.title}</h3>
                 <p className="text-muted-foreground">{step.description}</p>

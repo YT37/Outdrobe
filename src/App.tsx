@@ -1,9 +1,9 @@
-import { HashRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Route, Routes } from "react-router-dom";
 import { Navigation } from "./components/Navigation";
-import { HomePage } from "./pages/HomePage";
 import { AIAgentPage } from "./pages/AIAgentPage";
-import { WardrobePage } from "./pages/WardrobePage";
+import { HomePage } from "./pages/HomePage";
 import { MarketplacePage } from "./pages/MarketplacePage";
+import { WardrobePage } from "./pages/WardrobePage";
 
 export default function App() {
   return (

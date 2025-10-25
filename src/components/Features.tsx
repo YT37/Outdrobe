@@ -1,8 +1,16 @@
-import { Brain, Mic, ShoppingBag, Sparkles, Calendar, TrendingUp } from "lucide-react";
-import { Card, CardContent } from "./ui/card";
-import { motion } from "motion/react";
-import { useInView } from "motion/react";
-import { useRef } from "react";
+import {
+  Brain,
+  Calendar,
+  Card,
+  CardContent,
+  Mic,
+  motion,
+  ShoppingBag,
+  Sparkles,
+  TrendingUp,
+  useInView,
+  useRef,
+} from "../utils/shared-imports";
 
 export function Features() {
   const ref = useRef(null);
@@ -12,43 +20,53 @@ export function Features() {
     {
       icon: Brain,
       title: "Agentic AI Memory",
-      description: "Remembers every outfit combination to prevent repetition. Kloset learns and adapts to your preferences over time.",
+      description:
+        "Remembers every outfit combination to prevent repetition. Kloset learns and adapts to your preferences over time.",
       color: "#8B5CF6",
     },
     {
       icon: Mic,
       title: "Voice-First Experience",
-      description: "Simply speak naturally: 'I've got a date tonight' or 'What should I wear for class tomorrow?' and get instant outfit suggestions.",
+      description:
+        "Simply speak naturally: 'I've got a date tonight' or 'What should I wear for class tomorrow?' and get instant outfit suggestions.",
       color: "#EC4899",
     },
     {
       icon: Sparkles,
       title: "Smart Color Matching",
-      description: "Uses color contrast principles to create visually appealing combinations that work perfectly for any occasion.",
+      description:
+        "Uses color contrast principles to create visually appealing combinations that work perfectly for any occasion.",
       color: "#06B6D4",
     },
     {
       icon: ShoppingBag,
       title: "Intelligent Shopping",
-      description: "Missing something? Outdrobe finds the cheapest, highest-rated options online and provides direct purchase links.",
+      description:
+        "Missing something? Outdrobe finds the cheapest, highest-rated options online and provides direct purchase links.",
       color: "#10B981",
     },
     {
       icon: Calendar,
       title: "Event-Based Planning",
-      description: "Context-aware outfit suggestions based on your event type, weather, and personal calendar.",
+      description:
+        "Context-aware outfit suggestions based on your event type, weather, and personal calendar.",
       color: "#F59E0B",
     },
     {
       icon: TrendingUp,
       title: "Adaptive Learning",
-      description: "Continuously improves recommendations based on your feedback and style evolution.",
+      description:
+        "Continuously improves recommendations based on your feedback and style evolution.",
       color: "#EF4444",
     },
   ];
 
   return (
-    <div id="features" ref={ref} className="py-20 bg-gradient-to-b from-background via-purple-50/30 to-background dark:via-purple-950/10">
+    <div
+      id="features"
+      ref={ref}
+      className="py-20 bg-gradient-to-b from-background via-purple-50/30 to-background dark:via-purple-950/10"
+    >
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -89,7 +107,10 @@ export function Features() {
                     whileHover={{ rotate: [0, -10, 10, -10, 0], scale: 1.1 }}
                     transition={{ duration: 0.5 }}
                   >
-                    <feature.icon className="size-7" style={{ color: feature.color }} />
+                    <feature.icon
+                      className="size-7"
+                      style={{ color: feature.color }}
+                    />
                   </motion.div>
                   <h3 className="text-xl mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
                     {feature.title}

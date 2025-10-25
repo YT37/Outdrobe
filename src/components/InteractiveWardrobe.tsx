@@ -1,8 +1,12 @@
+import {
+  Float,
+  OrbitControls,
+  PerspectiveCamera,
+  Text,
+} from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Float, PerspectiveCamera, Text } from "@react-three/drei";
-import { motion } from "motion/react";
-import { useInView } from "motion/react";
-import { useRef, useState, Suspense } from "react";
+import { motion, useInView } from "motion/react";
+import { Suspense, useRef, useState } from "react";
 import { Button } from "./ui/button";
 
 interface WardrobeItemProps {
@@ -13,14 +17,20 @@ interface WardrobeItemProps {
   isSelected: boolean;
 }
 
-function WardrobeItem({ position, color, label, onClick, isSelected }: WardrobeItemProps) {
+function WardrobeItem({
+  position,
+  color,
+  label,
+  onClick,
+  isSelected,
+}: WardrobeItemProps) {
   return (
     <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
       <group position={position} onClick={onClick}>
         <mesh scale={isSelected ? 1.2 : 1}>
           <boxGeometry args={[1, 1.5, 0.2]} />
-          <meshStandardMaterial 
-            color={color} 
+          <meshStandardMaterial
+            color={color}
             emissive={isSelected ? color : "#000000"}
             emissiveIntensity={isSelected ? 0.3 : 0}
           />
@@ -46,22 +56,62 @@ interface WardrobeSceneProps {
 
 function WardrobeScene({ selectedItems, onItemClick }: WardrobeSceneProps) {
   const items = [
-    { position: [-3, 1, 0] as [number, number, number], color: "#FF6B9D", label: "Shirt", id: "shirt" },
-    { position: [-1, 1, 0] as [number, number, number], color: "#4ECDC4", label: "Pants", id: "pants" },
-    { position: [1, 1, 0] as [number, number, number], color: "#FFE66D", label: "Dress", id: "dress" },
-    { position: [3, 1, 0] as [number, number, number], color: "#95E1D3", label: "Jacket", id: "jacket" },
-    { position: [-2, -1, 0] as [number, number, number], color: "#A8E6CF", label: "Skirt", id: "skirt" },
-    { position: [0, -1, 0] as [number, number, number], color: "#F38181", label: "Shoes", id: "shoes" },
-    { position: [2, -1, 0] as [number, number, number], color: "#AA96DA", label: "Bag", id: "bag" },
+    {
+      position: [-3, 1, 0] as [number, number, number],
+      color: "#FF6B9D",
+      label: "Shirt",
+      id: "shirt",
+    },
+    {
+      position: [-1, 1, 0] as [number, number, number],
+      color: "#4ECDC4",
+      label: "Pants",
+      id: "pants",
+    },
+    {
+      position: [1, 1, 0] as [number, number, number],
+      color: "#FFE66D",
+      label: "Dress",
+      id: "dress",
+    },
+    {
+      position: [3, 1, 0] as [number, number, number],
+      color: "#95E1D3",
+      label: "Jacket",
+      id: "jacket",
+    },
+    {
+      position: [-2, -1, 0] as [number, number, number],
+      color: "#A8E6CF",
+      label: "Skirt",
+      id: "skirt",
+    },
+    {
+      position: [0, -1, 0] as [number, number, number],
+      color: "#F38181",
+      label: "Shoes",
+      id: "shoes",
+    },
+    {
+      position: [2, -1, 0] as [number, number, number],
+      color: "#AA96DA",
+      label: "Bag",
+      id: "bag",
+    },
   ];
 
   return (
     <>
       <PerspectiveCamera makeDefault position={[0, 0, 10]} />
       <ambientLight intensity={0.5} />
-      <spotLight position={[10, 10, 10]} angle={0.3} penumbra={1} intensity={1} />
+      <spotLight
+        position={[10, 10, 10]}
+        angle={0.3}
+        penumbra={1}
+        intensity={1}
+      />
       <pointLight position={[-10, -10, -10]} intensity={0.5} />
-      
+
       {items.map((item) => (
         <WardrobeItem
           key={item.id}
@@ -72,7 +122,7 @@ function WardrobeScene({ selectedItems, onItemClick }: WardrobeSceneProps) {
           isSelected={selectedItems.includes(item.id)}
         />
       ))}
-      
+
       <OrbitControls enableZoom={false} autoRotate autoRotateSpeed={0.5} />
     </>
   );
@@ -85,8 +135,8 @@ export function InteractiveWardrobe() {
   const [hasRendered, setHasRendered] = useState(false);
 
   const handleItemClick = (id: string) => {
-    setSelectedItems(prev => 
-      prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
+    setSelectedItems((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
     );
   };
 
@@ -110,7 +160,8 @@ export function InteractiveWardrobe() {
         >
           <h2 className="text-4xl md:text-5xl mb-4">Your Digital Wardrobe</h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
-            Interact with your clothing in 3D. Click items to select them or let AI create the perfect combination.
+            Interact with your clothing in 3D. Click items to select them or let
+            AI create the perfect combination.
           </p>
           <Button onClick={handleGenerateOutfit} size="lg">
             Generate AI Outfit
@@ -126,7 +177,10 @@ export function InteractiveWardrobe() {
           {hasRendered && (
             <Canvas gl={{ antialias: true, alpha: true }}>
               <Suspense fallback={null}>
-                <WardrobeScene selectedItems={selectedItems} onItemClick={handleItemClick} />
+                <WardrobeScene
+                  selectedItems={selectedItems}
+                  onItemClick={handleItemClick}
+                />
               </Suspense>
             </Canvas>
           )}
@@ -139,7 +193,8 @@ export function InteractiveWardrobe() {
             className="mt-8 text-center"
           >
             <p className="text-lg">
-              Selected: <span className="text-primary">{selectedItems.join(", ")}</span>
+              Selected:{" "}
+              <span className="text-primary">{selectedItems.join(", ")}</span>
             </p>
           </motion.div>
         )}
