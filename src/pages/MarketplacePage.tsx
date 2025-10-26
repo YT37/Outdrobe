@@ -10,8 +10,7 @@ import {
   Zap,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { useState } from "react";
-import { AvatarViewer } from "../components/AvatarViewer";
+import { lazy, Suspense, useState } from "react";
 import { Badge } from "../components/ui/badge";
 import { Button } from "../components/ui/button";
 import {
@@ -22,6 +21,13 @@ import {
   CardTitle,
 } from "../components/ui/card";
 import { Checkbox } from "../components/ui/checkbox";
+
+// Lazy load AvatarViewer to prevent multiple Three.js instances
+const AvatarViewer = lazy(() =>
+  import("../components/AvatarViewer").then((module) => ({
+    default: module.AvatarViewer,
+  }))
+);
 
 interface WardrobeItem {
   id: number;
@@ -249,7 +255,7 @@ export function MarketplacePage() {
   const recommendations = selectedItem ? getRecommendations(selectedItem) : [];
 
   return (
-    <div className="min-h-screen pt-24 pb-16 bg-gradient-to-b from-background via-purple-50/20 to-background dark:via-purple-950/10">
+    <div className="min-h-screen pt-28 pb-16 bg-gradient-to-b from-background via-purple-50/20 to-background dark:via-purple-950/10">
       <div className="container mx-auto px-4">
         {/* Header */}
         <motion.div
@@ -261,13 +267,37 @@ export function MarketplacePage() {
             <ShoppingCart className="size-8 text-white" />
           </div>
           <h1
-            className="text-5xl md:text-6xl mb-4"
-            style={{ fontFamily: "var(--font-heading)" }}
+            className="text-7xl md:text-9xl tracking-tight mb-4"
+            style={{
+              fontFamily: "var(--font-heading)",
+              WebkitTextStroke: "4px currentColor",
+            }}
           >
-            <span className="text-black dark:text-white">Smart</span>
-            <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-              {" "}
-              Marketplace
+            <span className="block">
+              <span
+                className="text-black dark:text-white"
+                style={{ WebkitTextStroke: "4px currentColor" }}
+              >
+                Market
+              </span>
+              <span
+                className="bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent"
+                style={{
+                  WebkitTextStroke: "4px transparent",
+                  WebkitTextFillColor: "transparent",
+                }}
+              >
+                place
+              </span>
+              <span
+                className="text-black dark:text-black"
+                style={{
+                  WebkitTextStroke: "0px",
+                  WebkitTextFillColor: "#000000",
+                }}
+              >
+                .
+              </span>
             </span>
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -543,11 +573,15 @@ export function MarketplacePage() {
       </AnimatePresence>
 
       {/* Avatar Viewer Modal */}
-      <AvatarViewer
-        isOpen={avatarViewerOpen}
-        onClose={() => setAvatarViewerOpen(false)}
-        selectedItems={tryOnItems}
-      />
+      {avatarViewerOpen && (
+        <Suspense fallback={null}>
+          <AvatarViewer
+            isOpen={avatarViewerOpen}
+            onClose={() => setAvatarViewerOpen(false)}
+            selectedItems={tryOnItems}
+          />
+        </Suspense>
+      )}
     </div>
   );
 }

@@ -4,11 +4,9 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
   plugins: [react()],
-  root: process.cwd(),
   resolve: {
     extensions: [".js", ".jsx", ".ts", ".tsx", ".json"],
     alias: {
-      // Normal module resolution for three.js
       "vaul@1.1.2": "vaul",
       "sonner@2.0.3": "sonner",
       "recharts@2.15.2": "recharts",
@@ -54,10 +52,24 @@ export default defineConfig({
   build: {
     target: "esnext",
     outDir: "dist",
-    emptyOutDir: true,
   },
   server: {
     port: 3000,
     open: true,
+    proxy: {
+      "/api": {
+        target: "https://outdrobe.tech",
+        changeOrigin: true,
+        secure: true,
+        configure: (proxy, options) => {
+          proxy.on("error", (err, req, res) => {
+            console.log("Proxy error:", err);
+          });
+          proxy.on("proxyReq", (proxyReq, req, res) => {
+            console.log("Proxying request:", req.method, req.url);
+          });
+        },
+      },
+    },
   },
 });

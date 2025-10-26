@@ -1,7 +1,6 @@
-import { MessageSquare, Mic, Sparkles } from "lucide-react";
-import { motion } from "motion/react";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { ArrowDown, Sparkles } from "lucide-react";
+import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "./ui/button";
 
 // Fashion clothing SVG components
@@ -222,6 +221,48 @@ interface ClothingItem {
 
 export function Hero3D() {
   const [hoveredItem, setHoveredItem] = useState<number | null>(null);
+  const [displayedText, setDisplayedText] = useState("");
+  const fullText = "Meet Kloset - Your Personal AI Stylist";
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Mouse tracking for spinning
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const springConfig = { damping: 25, stiffness: 150 };
+  const rotateX = useSpring(
+    useTransform(mouseY, [-0.5, 0.5], [15, -15]),
+    springConfig
+  );
+  const rotateY = useSpring(
+    useTransform(mouseX, [-0.5, 0.5], [-15, 15]),
+    springConfig
+  );
+
+  // Typewriter effect
+  useEffect(() => {
+    let currentIndex = 0;
+    const timer = setInterval(() => {
+      if (currentIndex <= fullText.length) {
+        setDisplayedText(fullText.slice(0, currentIndex));
+        currentIndex++;
+      } else {
+        clearInterval(timer);
+      }
+    }, 50);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  // Track mouse position
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    mouseX.set((e.clientX - centerX) / rect.width);
+    mouseY.set((e.clientY - centerY) / rect.height);
+  };
 
   const clothingItems: ClothingItem[] = [
     {
@@ -250,8 +291,8 @@ export function Hero3D() {
       id: 3,
       Component: Dress,
       color: "#FFE66D", // Sunny Yellow
-      initialX: 65,
-      initialY: 60,
+      initialX: 72,
+      initialY: 48,
       rotation: -5,
       scale: 1.3,
       delay: 0.4,
@@ -282,7 +323,7 @@ export function Hero3D() {
   ];
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
+    <div className="relative min-h-screen flex items-center justify-center overflow-hidden pt-28">
       {/* Gradient Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 dark:from-purple-950/20 dark:via-pink-950/20 dark:to-blue-950/20" />
 
@@ -317,23 +358,33 @@ export function Hero3D() {
       </div>
 
       {/* Floating Clothing Items */}
-      <div className="absolute inset-0 pointer-events-none">
+      <div
+        ref={containerRef}
+        className="absolute inset-0 pointer-events-none"
+        onMouseMove={handleMouseMove}
+      >
         {clothingItems.map((item) => (
           <motion.div
             key={item.id}
-            className="absolute pointer-events-auto cursor-pointer"
+            className="absolute pointer-events-auto cursor-grab active:cursor-grabbing"
             style={{
               left: `${item.initialX}%`,
               top: `${item.initialY}%`,
-              width: "120px",
-              height: "120px",
+              width: "200px",
+              height: "200px",
+              rotateX: hoveredItem === item.id ? rotateX : 0,
+              rotateY: hoveredItem === item.id ? rotateY : 0,
+              transformPerspective: 1000,
             }}
             initial={{ opacity: 0, scale: 0 }}
             animate={{
-              opacity: hoveredItem === item.id ? 1 : 0.7,
-              scale: hoveredItem === item.id ? item.scale * 1.15 : item.scale,
-              y: [0, -20, 0],
-              rotate: [item.rotation, item.rotation + 5, item.rotation],
+              opacity: hoveredItem === item.id ? 1 : 0.8,
+              scale: hoveredItem === item.id ? item.scale * 1.2 : item.scale,
+              y: [0, -25, 0],
+              rotate:
+                hoveredItem === item.id
+                  ? 0
+                  : [item.rotation, item.rotation + 8, item.rotation],
             }}
             transition={{
               opacity: { duration: 0.3 },
@@ -352,16 +403,41 @@ export function Hero3D() {
               },
             }}
             whileInView={{
-              opacity: hoveredItem === item.id ? 1 : 0.7,
+              opacity: hoveredItem === item.id ? 1 : 0.8,
               scale: item.scale,
             }}
             onHoverStart={() => setHoveredItem(item.id)}
             onHoverEnd={() => setHoveredItem(null)}
+            whileTap={{ scale: item.scale * 1.3 }}
           >
             <div className="relative group">
+              {/* Constant Colored Glow - Always Visible */}
+              <motion.div
+                animate={{
+                  opacity:
+                    hoveredItem === item.id
+                      ? [0.4, 0.7, 0.4]
+                      : [0.25, 0.45, 0.25],
+                  scale:
+                    hoveredItem === item.id ? [1.3, 1.5, 1.3] : [1.1, 1.3, 1.1],
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: item.delay,
+                }}
+                className="absolute inset-0 -z-10 pointer-events-none"
+                style={{
+                  backgroundColor: item.color,
+                  filter: "blur(30px)",
+                  transform: "scale(1.2)",
+                }}
+              />
+
               <item.Component
                 color={item.color}
-                className="w-full h-full drop-shadow-2xl transition-all duration-300"
+                className="w-full h-full drop-shadow-2xl transition-all duration-300 relative z-10"
               />
 
               {/* AI Sparkle Effect on Hover */}
@@ -369,9 +445,9 @@ export function Hero3D() {
                 <motion.div
                   initial={{ opacity: 0, scale: 0.5 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="absolute -top-2 -right-2"
+                  className="absolute -top-2 -right-2 z-20"
                 >
-                  <Sparkles className="size-6 text-yellow-400 fill-yellow-400 animate-pulse" />
+                  <Sparkles className="size-8 text-yellow-400 fill-yellow-400 animate-pulse" />
                 </motion.div>
               )}
 
@@ -380,7 +456,7 @@ export function Hero3D() {
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap bg-black/80 text-white px-3 py-1 rounded-full text-xs"
+                  className="absolute -bottom-10 left-1/2 -translate-x-1/2 whitespace-nowrap bg-black/80 text-white px-4 py-2 rounded-full text-sm"
                 >
                   {item.name}
                 </motion.div>
@@ -395,43 +471,74 @@ export function Hero3D() {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
           className="max-w-4xl mx-auto"
         >
-          {/* Badge */}
+          {/* Typewriter Badge */}
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.5, delay: 1.2 }}
-            className="inline-flex items-center gap-2 mb-6 px-5 py-2.5 bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-blue-500/10 rounded-full border-2 border-purple-500/20 backdrop-blur-sm"
+            transition={{ duration: 0.4, delay: 0.2 }}
+            className="inline-flex items-center gap-2 mb-8 px-5 py-2.5 bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-blue-500/10 rounded-full border-2 border-purple-500/20 backdrop-blur-sm min-h-[44px]"
           >
-            <Sparkles className="size-4 text-purple-600 dark:text-purple-400" />
-            <span className="text-sm bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent">
-              Meet Kloset - Your AI Voice Stylist
+            <Sparkles className="size-4 text-purple-600 dark:text-purple-400 animate-pulse" />
+            <span className="text-sm bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent whitespace-nowrap">
+              {displayedText}
+              <motion.span
+                animate={{ opacity: [1, 0, 1] }}
+                transition={{ duration: 0.8, repeat: Infinity }}
+                className="inline-block ml-0.5"
+              >
+                |
+              </motion.span>
             </span>
           </motion.div>
 
           {/* Main Heading */}
-          <motion.h1
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.4 }}
-            className="text-7xl md:text-9xl mb-4 tracking-tight"
-            style={{ fontFamily: "var(--font-heading)" }}
+            transition={{ duration: 0.6, delay: 0.8 }}
+            className="mb-4"
           >
-            <span className="block">
-              <span className="text-black dark:text-white">Out</span>
-              <span className="bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent">
-                drobe
+            <h1
+              className="text-7xl md:text-9xl tracking-tight"
+              style={{
+                fontFamily: "var(--font-heading)",
+                WebkitTextStroke: "4px currentColor",
+              }}
+            >
+              <span className="block">
+                <span
+                  className="text-black dark:text-white"
+                  style={{ WebkitTextStroke: "4px currentColor" }}
+                >
+                  Out
+                </span>
+                <span
+                  className="bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent"
+                  style={{
+                    WebkitTextStroke: "4px transparent",
+                    WebkitTextFillColor: "transparent",
+                  }}
+                >
+                  drobe
+                </span>
+                <span
+                  className="text-black dark:text-white"
+                  style={{ WebkitTextStroke: "0px" }}
+                >
+                  .
+                </span>
               </span>
-            </span>
-          </motion.h1>
+            </h1>
+          </motion.div>
 
           {/* Subscript Slogan */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.5 }}
+            transition={{ duration: 0.6, delay: 1.2 }}
             className="text-lg md:text-xl mb-8 text-muted-foreground tracking-wide uppercase"
             style={{
               fontFamily: "var(--font-slogan)",
@@ -446,43 +553,65 @@ export function Hero3D() {
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.7 }}
-            className="text-xl md:text-2xl mb-10 text-muted-foreground max-w-2xl mx-auto leading-relaxed"
-            style={{ fontFamily: "var(--font-body)" }}
+            transition={{ duration: 0.6, delay: 1.4 }}
+            className="text-xl md:text-2xl mb-10 max-w-2xl mx-auto leading-relaxed"
+            style={{
+              fontFamily: "var(--font-body)",
+              color: "#7C3AED",
+            }}
           >
-            Outdrobe is powered by{" "}
-            <span className="text-foreground">Kloset</span>, your agentic AI
-            stylist that analyzes your wardrobe, creates unique combinations,
-            and <span className="text-foreground">remembers every outfit</span>{" "}
-            you've worn.
+            Your agentic AI stylist that analyzes your wardrobe, creates unique
+            combinations, remembers every outfit you've worn and{" "}
+            <span style={{ fontWeight: "600", color: "#6D28D9" }}>
+              shops for you
+            </span>
+            !
           </motion.p>
 
-          {/* CTA Buttons */}
+          {/* CTA Button */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.8 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+            transition={{ duration: 0.6, delay: 1.6 }}
+            className="flex justify-center items-center"
           >
-            <Link to="/kloset">
-              <Button
-                size="lg"
-                className="gap-2 text-lg px-10 py-7 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 shadow-lg shadow-purple-500/30 transition-all hover:shadow-xl hover:shadow-purple-500/40 hover:scale-105"
+            <Button
+              size="lg"
+              onClick={() => {
+                const featuresSection = document.getElementById("features");
+                if (featuresSection) {
+                  featuresSection.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                  });
+                }
+              }}
+              className="gap-2 text-lg px-10 py-7 shadow-lg shadow-purple-500/30 transition-all hover:shadow-xl hover:shadow-purple-500/40 hover:scale-105 text-white"
+              style={{
+                background:
+                  "linear-gradient(to right, #EC4899, #8B5CF6, #3B82F6)",
+              }}
+              onMouseEnter={(e: React.MouseEvent<HTMLButtonElement>) => {
+                e.currentTarget.style.background =
+                  "linear-gradient(to right, #DB2777, #7C3AED, #2563EB)";
+              }}
+              onMouseLeave={(e: React.MouseEvent<HTMLButtonElement>) => {
+                e.currentTarget.style.background =
+                  "linear-gradient(to right, #EC4899, #8B5CF6, #3B82F6)";
+              }}
+            >
+              Get Started
+              <motion.div
+                animate={{ y: [0, 3, 0] }}
+                transition={{
+                  duration: 1.5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
               >
-                <Mic className="size-5" />
-                Start Voice Chat
-              </Button>
-            </Link>
-            <Link to="/wardrobe">
-              <Button
-                size="lg"
-                variant="outline"
-                className="gap-2 text-lg px-10 py-7 border-2 hover:bg-purple-50 dark:hover:bg-purple-950/30 transition-all hover:scale-105"
-              >
-                <MessageSquare className="size-5" />
-                View My Wardrobe
-              </Button>
-            </Link>
+                <ArrowDown className="size-5" />
+              </motion.div>
+            </Button>
           </motion.div>
 
           {/* Example Prompts */}

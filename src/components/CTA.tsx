@@ -1,4 +1,7 @@
-import { Button, Link, Mic, Users, Zap, motion } from "../utils/shared-imports";
+import { Mic, Sparkles, Users, Zap } from "lucide-react";
+import { motion } from "motion/react";
+import { Link } from "react-router-dom";
+import { Button } from "./ui/button";
 
 export function CTA() {
   const features = [
@@ -8,7 +11,7 @@ export function CTA() {
   ];
 
   return (
-    <div className="relative py-32 overflow-hidden">
+    <div className="relative py-16 pb-8 overflow-hidden">
       {/* Animated Background */}
       <div className="absolute inset-0 opacity-30">
         <motion.div
@@ -23,6 +26,32 @@ export function CTA() {
             ease: "linear",
           }}
         />
+        <motion.div
+          className="absolute top-20 left-20 w-32 h-32 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 blur-2xl"
+          animate={{
+            x: [0, 100, 0],
+            y: [0, 50, 0],
+            scale: [1, 1.5, 1],
+          }}
+          transition={{
+            duration: 15,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+        <motion.div
+          className="absolute bottom-20 right-20 w-40 h-40 rounded-full bg-gradient-to-br from-pink-500 to-purple-500 blur-2xl"
+          animate={{
+            x: [0, -80, 0],
+            y: [0, -60, 0],
+            scale: [1.2, 1, 1.2],
+          }}
+          transition={{
+            duration: 18,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
       </div>
 
       <div className="relative z-10 container mx-auto px-4 text-center">
@@ -32,9 +61,24 @@ export function CTA() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-4xl md:text-6xl mb-6">
-            Ready to Transform Your Wardrobe?
-          </h2>
+          <motion.div className="relative inline-block mb-6">
+            <motion.div
+              animate={{
+                rotate: 360,
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "linear",
+              }}
+              className="absolute -top-6 -right-6"
+            >
+              <Sparkles className="size-8 text-yellow-400 fill-yellow-400" />
+            </motion.div>
+            <h2 className="text-4xl md:text-6xl bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent">
+              Ready to Transform Your Wardrobe?
+            </h2>
+          </motion.div>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
             Join thousands who never worry about "what to wear" again. Kloset,
             your AI fashion advisor, is ready to help.
@@ -48,10 +92,18 @@ export function CTA() {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1, duration: 0.4 }}
-                className="flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full border border-primary/20"
+                whileHover={{ scale: 1.05, y: -2 }}
+                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-full border border-purple-500/20 hover:border-purple-500/40 transition-all cursor-pointer group"
               >
-                <feature.icon className="size-4" />
-                <span className="text-sm">{feature.text}</span>
+                <motion.div
+                  animate={{ rotate: [0, 10, -10, 0] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                >
+                  <feature.icon className="size-4 text-purple-600 dark:text-purple-400" />
+                </motion.div>
+                <span className="text-sm group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                  {feature.text}
+                </span>
               </motion.div>
             ))}
           </div>
@@ -63,16 +115,39 @@ export function CTA() {
             transition={{ delay: 0.4, duration: 0.6 }}
           >
             <Link to="/kloset">
-              <Button
-                size="lg"
-                className="text-lg px-12 py-7 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                Start Your Fashion Journey
-              </Button>
+                <Button
+                  size="lg"
+                  className="text-lg px-12 py-7 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 shadow-2xl shadow-purple-500/30 hover:shadow-purple-500/50 transition-all"
+                >
+                  <motion.span
+                    animate={{
+                      textShadow: [
+                        "0 0 0px rgba(255,255,255,0)",
+                        "0 0 10px rgba(255,255,255,0.5)",
+                        "0 0 0px rgba(255,255,255,0)",
+                      ],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                    }}
+                  >
+                    Start Your Fashion Journey
+                  </motion.span>
+                </Button>
+              </motion.div>
             </Link>
-            <p className="mt-4 text-sm text-muted-foreground">
+            <motion.p
+              className="mt-4 text-sm text-muted-foreground"
+              animate={{ opacity: [0.7, 1, 0.7] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
               No credit card required • Free to start
-            </p>
+            </motion.p>
           </motion.div>
         </motion.div>
       </div>

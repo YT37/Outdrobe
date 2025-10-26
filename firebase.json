@@ -8,9 +8,35 @@
     ],
     "rewrites": [
       {
+        "source": "/api/converse",
+        "function": "converse"
+      },
+      {
+        "source": "/api/tts",
+        "function": "tts"
+      },
+      {
+        "source": "/api/stt",
+        "function": "stt"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }
     ]
-  }
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ],
+      "predeploy": []
+    }
+  ]
 }

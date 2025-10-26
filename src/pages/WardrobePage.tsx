@@ -186,7 +186,7 @@ export function WardrobePage() {
   ];
 
   return (
-    <div className="min-h-screen pt-20 pb-8 bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 dark:from-purple-950/20 dark:via-pink-950/20 dark:to-blue-950/20">
+    <div className="min-h-screen pt-28 pb-8 bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 dark:from-purple-950/20 dark:via-pink-950/20 dark:to-blue-950/20">
       <div className="container mx-auto px-4 max-w-7xl">
         {/* Header */}
         <motion.div
@@ -194,11 +194,62 @@ export function WardrobePage() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
+          <div className="text-center mb-12">
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1, rotate: 360 }}
+              transition={{ type: "spring", stiffness: 200, delay: 0.2 }}
+              className="inline-block mb-6"
+            >
+              <div className="relative">
+                <Shirt className="size-16 text-purple-600 dark:text-purple-400" />
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                  className="absolute -top-2 -right-2"
+                >
+                  <Sparkles className="size-6 text-pink-500" />
+                </motion.div>
+              </div>
+            </motion.div>
+
+            <h1
+              className="text-7xl md:text-9xl tracking-tight mb-4"
+              style={{
+                fontFamily: "var(--font-heading)",
+                WebkitTextStroke: "4px currentColor",
+              }}
+            >
+              <span className="block">
+                <span
+                  className="text-black dark:text-white"
+                  style={{ WebkitTextStroke: "4px currentColor" }}
+                >
+                  Your Digital{" "}
+                </span>
+                <span
+                  className="bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent"
+                  style={{
+                    WebkitTextStroke: "4px transparent",
+                    WebkitTextFillColor: "transparent",
+                  }}
+                >
+                  Wardrobe
+                </span>
+              </span>
+            </h1>
+
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
+              Browse your collection, select items to create outfits, or let AI
+              generate the perfect combination for you
+            </p>
+          </div>
+
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-4xl md:text-5xl mb-2 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+              <h2 className="text-3xl md:text-4xl mb-2 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
                 My Wardrobe
-              </h1>
+              </h2>
               <p className="text-muted-foreground">
                 Manage your collection and track your style
               </p>
@@ -308,7 +359,9 @@ export function WardrobePage() {
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-muted-foreground" />
                   <Input
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      setSearchQuery(e.target.value)
+                    }
                     placeholder="Search by name, brand, or tags..."
                     className="pl-10"
                   />
