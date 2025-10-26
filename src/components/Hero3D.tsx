@@ -464,7 +464,7 @@ export function Hero3D() {
             transition={{ duration: 0.8, delay: 1.8 }}
             className="flex flex-col sm:flex-row gap-4 justify-center items-center"
           >
-            <Link to="/ai-agent">
+            <Link to="/kloset">
               <Button
                 size="lg"
                 className="gap-2 text-lg px-10 py-7 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 shadow-lg shadow-purple-500/30 transition-all hover:shadow-xl hover:shadow-purple-500/40 hover:scale-105"

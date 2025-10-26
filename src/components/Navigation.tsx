@@ -8,7 +8,7 @@ export function Navigation() {
 
   const navItems = [
     { path: "/", label: "Home", icon: Home },
-    { path: "/ai-agent", label: "Kloset", icon: Brain },
+    { path: "/kloset", label: "Kloset", icon: Brain },
     { path: "/wardrobe", label: "My Wardrobe", icon: ShoppingBag },
     { path: "/marketplace", label: "Marketplace", icon: ShoppingCart },
   ];

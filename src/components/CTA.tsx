@@ -62,7 +62,7 @@ export function CTA() {
             viewport={{ once: true }}
             transition={{ delay: 0.4, duration: 0.6 }}
           >
-            <Link to="/ai-agent">
+            <Link to="/kloset">
               <Button
                 size="lg"
                 className="text-lg px-12 py-7 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
