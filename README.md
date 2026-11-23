@@ -1,45 +1,96 @@
-# 👗 Outdrobe - AI-Powered Fashion Assistant
+# Outdrobe
 
-> OutDrobe is your AI-powered fashion companion — an intelligent stylist that lives inside your closet. Unlike traditional styling apps or retail recommendation engines, Outdrobe is not a shopping catalog—it is a design intelligence system built around personalization and context. While competitors focus on selling products or static outfit templates, Outdrobe starts with what users already own and builds upward. It uniquely combines design logic, personalization, and real-time contextual understanding to create outfits that are both expressive and functional. By bridging the gap between personal wardrobe data and the global fashion ecosystem, Outdrobe offers an experience closer to having a personal stylist — but infinitely faster, smarter, and more accessible. Outdrobe transforms clothing choice into a science of confidence — redefining how people dress, travel, and express themselves through style. It: 🧠 Analyzes your wardrobe with a quick snap to identify item types, colors, and categories.
-> 🪄 Creates new outfit combinations for any event, season, or vibe.
-> 💬 Speaks to you — thanks to integrated voice AI — so you can have a natural conversation about what to wear.
-> 🧠 Remembers every outfit you’ve worn, avoiding repetition and helping you maintain fresh looks.
-> 🛍️ Shops for you — fetching affordable, matching pieces if your wardrobe is missing something.
-> 💅 Learns your preferences over time, understanding your personal style and improving with every use.
-> Whether it’s a presentation, a coffee date, or a costume party, OutDrobe ensures your outfit fits the moment — perfectly.
+An AI stylist that starts from the clothes you already own. Snap your wardrobe, then ask for an outfit for a presentation, a coffee date or a trip, by text or by voice. Outdrobe identifies each item's type and colour, builds combinations around the occasion, remembers what you've worn, and points you to affordable pieces when something is missing.
 
-# YC-Inspiration
-When we came across *StyleUp* (YC W13) — a company that brought daily outfit recommendations based on weather and lifestyle — we saw the foundation of a great idea that never fully evolved with modern technology. The original concept simplified what to wear, but it stopped at one-size-fits-all suggestions. In a world where personalization, sustainability, and AI intelligence now define user experiences, we asked: What would StyleUp look like if it were built today, with AI at its core?
+**Live:** [outdrobe.tech](https://outdrobe.tech)
 
-That question became the seed for Outdrobe — an AI stylist that doesn’t just suggest outfits but thinks like a designer. Instead of generic weather-based tips, Outdrobe analyzes each user’s real wardrobe, trip context, body profile, and color psychology to craft looks that are deeply personal and stylistically cohesive. It reimagines the fashion recommendation space through design intelligence, practical styling, and contextual awareness — solving the age-old problem of “nothing to wear” with an AI that understands not just clothes, but people.
+## Why we built it
 
-## 🚀 Live Demo
+*StyleUp* (YC W13) gave people daily outfit suggestions based on the weather and their lifestyle. It made getting dressed simpler, but the suggestions were one-size-fits-all. We asked what StyleUp would look like if it were built today with AI at its core. Outdrobe is our answer: instead of generic weather tips, it looks at your real wardrobe, the context of your day or trip, and colour theory to put together looks that are personal and coherent.
 
-Visit the live application: **[outdrobe.tech](https://outdrobe.tech)**
+## What it does
 
-## 🛠️ Technology Stack
+- **Wardrobe:** upload photos of your clothes; each one is captioned by an image model and tagged with its type, colour and category.
+- **AI stylist:** chat with an agent that suggests outfits for an event, season or mood using the items in your wardrobe.
+- **Voice:** talk to the stylist and hear it answer, with speech-to-text and text-to-speech.
+- **Marketplace:** browse matching pieces to fill gaps in your wardrobe.
+- **3D avatar:** preview looks on an avatar in the browser.
 
-### Frontend
-- **React 18** with TypeScript
-- **Vite** for fast development and building
-- **Tailwind CSS** for styling
-- **Web Speech API** for speech recognition fallback
-- **MediaRecorder API** for audio capture
+## How it fits together
 
-### Backend & AI
-- **Google Cloud Run** for serverless backend functions
-- **Fish Audio API** for premium text-to-speech and speech-to-text
-- **Elastic AI Agent** for intelligent fashion recommendations
-- **Google Cloud Storage + CDN** for global website hosting
+```
+Browser (Source Code/webiste)
+  │  React + Vite, hosted on Google Cloud Storage + CDN
+  │  VITE_API_URL ──▶
+  ▼
+Cloud Run API (Source Code/functions)          Flask
+  ├─ POST /converse ──▶ Elastic Agent Builder (Kibana)   fashion agent
+  ├─ POST /tts, /stt ─▶ Fish Audio                        voice in and out
+  ├─ POST /classify ──▶ Image server ─────────────┐
+  └─ GET  /health                                  │
+                                                   ▼
+Image server (Source Code/server)               Flask + BLIP-2 (blip2-opt-2.7b)
+  Compute Engine VM, n1-standard-4 with an NVIDIA T4, us-east1-c
+  POST /classify: base64 image in, item type / colour / category out
+```
 
-### Image Analysis Server
-- **Python 3.10** with Flask framework
-- **BLIP-2** (blip2-opt-2.7b) for image captioning and analysis
-- **PyTorch** with CUDA support for GPU acceleration
-- **Docker** containerization for easy deployment
+| Folder | What it is | Stack |
+| --- | --- | --- |
+| `Source Code/webiste` | The web app | React 18, TypeScript, Vite, Tailwind CSS, Radix UI, React Three Fiber |
+| `Source Code/functions` | Public API that the web app calls; keeps API keys server-side | Python, Flask, gunicorn, Cloud Run |
+| `Source Code/server` | GPU image-captioning service | Python, Flask, PyTorch, Hugging Face Transformers, Docker |
 
-<div align="center">
+## Running it locally
 
-Made with ❤️ by Yug, Avishek, & Keshava
+You need Node.js 20+, Python 3.11+ and, for deploys, the `gcloud` CLI signed in to the `outdrobe` project.
 
-</div>
+### Web app
+
+```bash
+cd "Source Code/webiste"
+npm install
+echo 'VITE_API_URL=http://localhost:8080' > .env   # or the deployed Cloud Run URL
+npm run dev
+```
+
+### API (functions)
+
+```bash
+cd "Source Code/functions"
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+export KIBANA_API_KEY=...   # Elastic Agent Builder key
+export FISH_API_KEY=...     # Fish Audio key
+python app.py               # serves on http://localhost:8080
+```
+
+`/classify` forwards to the image server address set in `SERVER_URL` at the top of `app.py`.
+
+### Image server
+
+The BLIP-2 model needs an NVIDIA GPU (the deployed VM uses a 16 GB T4) and the NVIDIA Container Toolkit. It downloads several gigabytes of weights into `./cache` on first start.
+
+```bash
+cd "Source Code/server"
+docker compose up --build   # serves on http://localhost:8080
+```
+
+The API also defaults to port 8080, so run one of them on another port (`PORT=8081 python app.py`) when you run both locally.
+
+## Deploying
+
+| Part | Command | Where it goes |
+| --- | --- | --- |
+| Web app | `npm run setup` once, then `npm run deploy` (in `Source Code/webiste`) | `gs://outdrobe-website` behind Cloud CDN at outdrobe.tech |
+| API | `./deploy.sh` (in `Source Code/functions`) | Cloud Run service `outdrobe-functions` in `us-central1`; `KIBANA_API_KEY` and `FISH_API_KEY` come from Secret Manager |
+| Image server | `./deploy.sh`, then `./vm-manage.sh start / stop / status / logs / ssh / update` (in `Source Code/server`) | Compute Engine VM `outdrobe-server` |
+
+Stop the GPU VM with `./vm-manage.sh stop` when you're not using it; it bills by the hour.
+
+## Team
+
+Built by Yug, Avishek and Keshava.
+
+## License
+
+[MIT](LICENSE)
