@@ -27,10 +27,10 @@ Visit the live application: **[outdrobe.tech](https://outdrobe.tech)**
 - **MediaRecorder API** for audio capture
 
 ### Backend & AI
-- **Firebase Functions** for serverless backend
+- **Google Cloud Run** for serverless backend functions
 - **Fish Audio API** for premium text-to-speech and speech-to-text
-- **Elastci AI Agent** for intelligent fashion recommendations
-- **Firebase Hosting** for deployment
+- **Elastic AI Agent** for intelligent fashion recommendations
+- **Google Cloud Storage + CDN** for global website hosting
 
 ### Image Analysis Server
 - **Python 3.10** with Flask framework

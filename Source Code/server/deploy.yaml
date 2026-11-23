@@ -1,0 +1,59 @@
+# Google Cloud Run service configuration for AI Server
+# Use: gcloud run services replace deploy.yaml --project=$PROJECT_ID
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: outdrobe-server
+  labels:
+    app: outdrobe-server
+  annotations:
+    run.googleapis.com/ingress: all
+    run.googleapis.com/launch-stage: BETA
+spec:
+  template:
+    metadata:
+      annotations:
+        run.googleapis.com/memory: "2Gi"
+        run.googleapis.com/cpu: "2000m"
+        run.googleapis.com/max-instances: "5"
+        run.googleapis.com/min-instances: "0"
+        run.googleapis.com/timeout: "600s"
+        autoscaling.knative.dev/maxScale: "5"
+        run.googleapis.com/execution-environment: gen2
+    spec:
+      serviceAccountName: outdrobe-server-sa@PROJECT_ID.iam.gserviceaccount.com
+      containerConcurrency: 10
+      timeoutSeconds: 600
+      containers:
+        - image: gcr.io/PROJECT_ID/outdrobe-server:latest
+          ports:
+            - name: http1
+              containerPort: 8080
+          env:
+            - name: PORT
+              value: "8080"
+            - name: FLASK_ENV
+              value: "production"
+            - name: TRANSFORMERS_CACHE
+              value: "/tmp/transformers_cache"
+          resources:
+            limits:
+              memory: "2Gi"
+              cpu: "2000m"
+            requests:
+              memory: "1Gi"
+              cpu: "1000m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 60
+            timeoutSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 30
+            timeoutSeconds: 10
